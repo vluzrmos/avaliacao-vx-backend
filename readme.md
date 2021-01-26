@@ -1,6 +1,6 @@
 # Avaliação para vaga de DEV VX CASE
 
-## Tecnologias usadas:  
+## Stack de Tecnologia:  
 Laravel  
 Vue/Vuex  
 Bulma  
