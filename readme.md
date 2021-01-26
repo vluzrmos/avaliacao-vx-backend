@@ -7,7 +7,7 @@ Bulma
 
 ## Instalação
  1. Clone este repositório  
- ` git clone https://github.com/eufelpsdev/avaliacao-vx-backend.git`
+ ` git clone https://github.com/eufelpsdev/avaliacao-vx-backend.git`  
  `cd sale-system`  
  2. Instale as dependencias
  ` composer install`  
