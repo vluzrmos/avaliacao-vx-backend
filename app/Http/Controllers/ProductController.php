@@ -1,11 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\ProductRequest;
 use App\Product;
+use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    protected $repository;
+    
+    public function __construct(ProductRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,12 +23,11 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        if(isset($request->product_name))
-            $query = strtoupper($request->product_name);
-            return Product::where('name','LIKE','%'.$query.'%')
-                        ->orWhere('reference','LIKE','%'.$query.'%')->get();
-
-        return Product::all();
+        if (isset($request->product_name)) {
+            return $this->repository->search($request->product_name);
+        }
+        
+        return $this->repository->all();
     }
     /**
      * Store a newly created resource in storage.
@@ -26,10 +35,10 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $product = new Product;
-        $product->create($request->all());
+        $this->repository->create($request->validated());
+
         return Response()->json('Produto cadastrado!', 201);
     }
 
@@ -39,9 +48,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Product $product)
     {
-        return Product::find($id);
+        return $product;
     }
 
 
@@ -52,16 +61,11 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Product $product)
     {
-        $product = Product::find($id);
-        $product->name = $request->name;
-        $product->reference = $request->reference;
-        $product->price = $request->price;
-        $product->delivery_days = $request->delivery_days;
-        $product->save();
-        return Response()->json('Produto Atualizado!', 200);
+        $this->repository->update($product, $request->validated());
 
+        return Response()->json('Produto Atualizado!', 200);
     }
 
     /**
@@ -72,9 +76,8 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = Product::find($id);
-        $product->delete();
-        return Response()->json('Produto Excluido!', 200);
+        $this->repository->delete($id);
 
+        return Response()->json('Produto Excluido!', 200);
     }
 }

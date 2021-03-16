@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Console\Commands\ProductCreate;
+use App\Jobs\SlackNotificationJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -13,7 +15,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        ProductCreate::class
     ];
 
     /**
@@ -23,9 +25,12 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule)
-    {
+    {       
         // $schedule->command('inspire')
         //          ->hourly();
+
+        $schedule->job(new SlackNotificationJob)
+            ->everyFiveMinutes();
     }
 
     /**
