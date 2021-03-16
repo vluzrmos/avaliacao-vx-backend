@@ -14,7 +14,7 @@ class SlackNotificationJob implements ShouldQueue
 
     public function handle()
     {
-        $webhook = config('services.slack.webhooks.slack_avaliacao');
+        $webhook = config('services.slack.webhook');
 
         if ($webhook) {
             Notification::route('slack', $webhook)->notify(new SlackNotification());

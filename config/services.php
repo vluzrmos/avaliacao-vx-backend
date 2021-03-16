@@ -45,9 +45,7 @@ return [
     ],
 
     'slack' => [
-        'webhooks' => [
-            'slack_avaliacao' => env('SLACK_WEBHOOKS_SLACK_AVALIACAO')
-        ]
+        'webhook' => env('SLACK_WEBHOOK') ?: env('LOG_SLACK_WEBHOOK_URL')
     ]
 
 ];
